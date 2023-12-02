@@ -1,5 +1,6 @@
 import Usuarios from "../models/Usuarios.js"
 import {sendMailToUser, sendMailToRecoveryPassword} from "../config/nodemailer.js"
+import generarJWT from "../helpers/createJWT.js"
 
 const login = async (req,res)=>{
     const {correo,contrasenia} = req.body
@@ -9,8 +10,10 @@ const login = async (req,res)=>{
     if(!usuarioBD) return res.status(404).json({msg:"Lo sentimos, el usuario no existe"})
     const verificarPassword = await usuarioBD.matchPasswords(contrasenia)
     if(!verificarPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
+
+    const token = await generarJWT(usuarioBD._id, usuarioBD.tipo_cuenta)
     const {nombre,apellido,correo:email,tipo_cuenta} = usuarioBD
-    res.status(200).json({nombre,apellido,email,tipo_cuenta})
+    res.status(200).json({token,nombre,apellido,email,tipo_cuenta})
 
 }
 const registro = async (req,res)=>{
@@ -72,7 +75,6 @@ export {
     login,
     registro,
     confirmEmail,
-    actualizarPerfil,
     actualizarPassword,
 	recuperarPassword,
     comprobarTokenPasword,
