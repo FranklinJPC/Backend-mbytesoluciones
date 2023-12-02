@@ -3,17 +3,22 @@ import {sendMailToUser, sendMailToRecoveryPassword} from "../config/nodemailer.j
 import generarJWT from "../helpers/createJWT.js"
 
 const login = async (req,res)=>{
-    const {correo,contrasenia} = req.body
-    if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
-    const usuarioBD = await Usuarios.findOne({correo}).select("-estado -__v -token -updatedAt -createdAt")
-    if(usuarioBD?.confirmEmail===false) return res.status(400).json({msg:"Lo sentimos, debes confirmar tu cuenta"})
-    if(!usuarioBD) return res.status(404).json({msg:"Lo sentimos, el usuario no existe"})
-    const verificarPassword = await usuarioBD.matchPasswords(contrasenia)
-    if(!verificarPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
-
-    const token = await generarJWT(usuarioBD._id, usuarioBD.tipo_cuenta)
-    const {nombre,apellido,correo:email,tipo_cuenta} = usuarioBD
-    res.status(200).json({token,nombre,apellido,email,tipo_cuenta})
+    try {
+        const {correo,contrasenia} = req.body
+        if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
+        const usuarioBD = await Usuarios.findOne({correo}).select("-estado -__v -token -updatedAt -createdAt")
+        if(usuarioBD?.confirmEmail===false) return res.status(400).json({msg:"Lo sentimos, debes confirmar tu cuenta"})
+        if(!usuarioBD) return res.status(404).json({msg:"Lo sentimos, el usuario no existe"})
+        const verificarPassword = await usuarioBD.matchPasswords(contrasenia)
+        if(!verificarPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
+    
+        const token = await generarJWT(usuarioBD._id, usuarioBD.tipo_cuenta)
+        const {nombre,apellido,correo:email,tipo_cuenta} = usuarioBD
+        res.status(200).json({token,nombre,apellido,email,tipo_cuenta})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({msg:"Lo sentimos, ha ocurrido un error"})
+    }
 
 }
 const registro = async (req,res)=>{

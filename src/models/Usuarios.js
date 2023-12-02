@@ -43,13 +43,13 @@ const usuarioSchema = new Schema({
 }, {
     timestamps: true
 })
-usuarioSchema.methods.encryptPassword = async function(password){
+usuarioSchema.methods.encryptPassword = async function(contrasenia){
     const salt = await bcrypt.genSalt(10)
-    const passwordEncrypt = await bcrypt.hash(password, salt)
+    const passwordEncrypt = await bcrypt.hash(contrasenia, salt)
     return passwordEncrypt
 }
-usuarioSchema.methods.matchPasswords = async function(password){
-    const response = await bcrypt.compare(password, this.password)
+usuarioSchema.methods.matchPasswords = async function(contrasenia){
+    const response = await bcrypt.compare(contrasenia, this.contrasenia)
     return response
 }
 usuarioSchema.methods.createToken = function(){
