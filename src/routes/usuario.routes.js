@@ -19,6 +19,5 @@ router.get("/recuperar-password/:token", comprobarTokenPasword);
 router.post("/nuevo-password/:token", nuevoPassword);
 
 router.put('/veterinario/actualizarpassword',actualizarPassword)
-router.put("/veterinario/:id", actualizarPerfil);
 
 export default router;  

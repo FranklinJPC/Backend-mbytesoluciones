@@ -32,6 +32,25 @@ const sendMailToUser = async(userMail,token)=>{
     console.log("Usuario: ", userMail);
 }
 
+// send mail with defined transport object
+const sendMailToRecoveryPassword = async(userMail,token)=>{
+    let info = await transport.sendMail({
+    from: 'admin@mybytes.com',
+    to: userMail,
+    subject: "Correo para reestablecer tu contraseña",
+    html: `
+    <h1>Mbytes Soluciones tecnologicas</h1>
+    <hr>
+    <a href=${process.env.URL_BACKEND}recuperar-password/${token}>Clic para reestablecer tu contraseña</a>
+    <hr>
+    <footer>Soluciones y productos</footer>
+    `
+    });
+    console.log("Mensaje enviado satisfactoriamente: ", info.messageId);
+}
+
+
 export {
-    sendMailToUser
+    sendMailToUser,
+    sendMailToRecoveryPassword
 }
