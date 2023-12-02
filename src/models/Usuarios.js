@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, mongo } from "mongoose";
-const usuarioSchema = ({
+import bcrypt from "bcryptjs";
+const usuarioSchema = new Schema({
     nombre: {
         type: String,
         require: true,
@@ -37,7 +38,6 @@ const usuarioSchema = ({
     },
     tipo_cuenta: {
         type: String,
-        require: true,
         default: "Cliente"
     }
 }, {

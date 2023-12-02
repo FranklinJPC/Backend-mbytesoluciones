@@ -1,8 +1,21 @@
-const login =(req,res)=>{
-    res.status(200).json({res:'login del veterinario'})
+import Usuarios from "../models/Usuarios.js"
+import {sendMailToUser} from "../config/nodemailer.js"
+
+const login = async (req,res)=>{
+    res.status(200).json({res:'login de usuario'})
 }
-const registro =(req,res)=>{
-    res.status(200).json({res:'registro de un nuevo veterinario'})
+const registro = async (req,res)=>{
+    const {correo,contrasenia} = req.body
+    if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
+    const verificarEmailBDD = await Usuarios.findOne({correo})
+    if(verificarEmailBDD) return res.status(400).json({msg:"Lo sentimos, el email ya se encuentra registrado"})
+    const nuevoUsuario = new Usuarios(req.body)
+    nuevoUsuario.contrasenia = await nuevoUsuario.encryptPassword(contrasenia)
+    
+    const token = nuevoUsuario.createToken()
+    await sendMailToUser(correo,token)
+    await nuevoUsuario.save()
+    res.status(200).json({msg:"Revisa tu correo electrónico para confirmar tu cuenta"})
 }
 const confirmEmail = (req,res)=>{
     res.status(200).json({res:'confirmar email de registro de veterinario'})
