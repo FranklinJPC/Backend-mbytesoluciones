@@ -6,7 +6,7 @@ dotenv.config()
 const transport = nodemailer.createTransport({
     host: process.env.HOST_NODEMAILER,
     port: process.env.PORT_NODEMAILER,
-    auth:{
+    auth: {
         user: process.env.USER_NODEMAILER,
         pass: process.env.PASS_NODEMAILER
     }
@@ -15,14 +15,14 @@ const transport = nodemailer.createTransport({
 // send mail with defined transport object
 const sendMailToUser = async(userMail,token)=>{
     let info = await transport.sendMail({
-        from: 'admin@mybytes.com',
+        from: 'MbyteSolucionesTecnologicas@outlook.com',
         to: userMail,
-        subject: "Verifica tu cuenta de correo electrónico",
+        subject: "Verificacion de cuenta nueva",
         html: 
         `
         <h1>Mbytes Soluciones tecnologicas</h1>
         <hr>
-        <a href=${process.env.URL_BACKEND}confirmar/${token}>Clic para confirmar tu cuenta</a>
+        <a href="${process.env.URL_BACKEND}confirmar/${token}">Clic para confirmar tu cuenta</a>
         <hr>
         <footer>Bienvenido!!</footer>
         `
@@ -35,13 +35,13 @@ const sendMailToUser = async(userMail,token)=>{
 // send mail with defined transport object
 const sendMailToRecoveryPassword = async(userMail,token)=>{
     let info = await transport.sendMail({
-    from: 'admin@mybytes.com',
+    from: 'MbyteSolucionesTecnologicas@outlook.com',
     to: userMail,
-    subject: "Correo para reestablecer tu contraseña",
+    subject: "Reestablecer tu contraseña",
     html: `
     <h1>Mbytes Soluciones tecnologicas</h1>
     <hr>
-    <a href=${process.env.URL_BACKEND}recuperar-password/${token}>Clic para reestablecer tu contraseña</a>
+    <a href="${process.env.URL_BACKEND}recuperar-password/${token}">Clic para reestablecer tu contraseña</a>
     <hr>
     <footer>Soluciones y productos</footer>
     `
