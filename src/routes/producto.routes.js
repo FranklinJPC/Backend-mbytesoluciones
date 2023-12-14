@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verificarAutenticacionAdmin } from "../middlewares/autenticacion.js";
+import verificarAutenticacion from "../middlewares/autenticacion.js";
 const router = Router();
 import {
     crearProducto,
@@ -9,10 +9,10 @@ import {
     obtenerProducto
 } from '../controllers/producto.controllers.js';
 
-router.post("/producto/nuevo", verificarAutenticacionAdmin, crearProducto);
+router.post("/producto/nuevo", verificarAutenticacion, crearProducto);
 router.get("/productos", obtenerProductos);
-router.put("/producto/actualizar/:id", verificarAutenticacionAdmin, actualizarProducto);
-router.delete("/producto/eliminar/:id", verificarAutenticacionAdmin, eliminarProducto);
+router.put("/producto/actualizar/:id", verificarAutenticacion, actualizarProducto);
+router.delete("/producto/eliminar/:id", verificarAutenticacion, eliminarProducto);
 router.get("/producto/detalle/:id", obtenerProducto);
 
 export default router;
