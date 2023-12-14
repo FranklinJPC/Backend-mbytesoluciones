@@ -23,7 +23,8 @@ const productoSchema = new Schema({
     },
     categoria: {
         type: mongoose.Types.ObjectId,
-        ref: "Categoria"
+        ref: "Categoria",
+        require: true
     },
 
 }, {

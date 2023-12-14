@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import routeUsuarios from './routes/usuario.routes.js';
 import routeProductos from './routes/producto.routes.js';
+import routeCategorias from './routes/categoria.routes.js';
 
 const app = Express();
 dotenv.config();
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {res.status(200).json({msg: "Servidor Encendido"})});
 // Rutass
 app.use('/api', routeUsuarios);
 app.use('/api', routeProductos);
+app.use('/api', routeCategorias);
 
 app.use((req, res) => {res.status(404).json({msg: "Ruta no encontrada"})});
 
