@@ -1,5 +1,5 @@
 import { Router } from "express";
-import verificarAutenticacion from "../middlewares/autenticacion.js";
+import {verificarAutenticacion} from "../middlewares/autenticacion.js";
 import {
     crearCategoria,
     obtenerCategorias,

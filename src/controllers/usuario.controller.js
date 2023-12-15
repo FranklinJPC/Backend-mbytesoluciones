@@ -58,11 +58,11 @@ const confirmEmail = async(req,res)=>{
 }
 const recuperarPassword= async(req,res)=>{
     try {
-        const {email: correo} = req.body
+        const {correo} = req.body
         if (Object.values(req.body).includes("")) return res.status(404).json({msg:"Lo sentimos, debes llenar todos los campos"})
-        const usuarioBD = await Usuarios.findOne({email: correo})
+        const usuarioBD = await Usuarios.findOne({correo: correo})
         if(!usuarioBD) return res.status(404).json({msg:"Lo sentimos, el usuario no se encuentra registrado"})
-        const token = usuarioBD.crearToken()
+        const token = usuarioBD.createToken()
         usuarioBD.token=token
         await sendMailToRecoveryPassword(correo,token)
         await usuarioBD.save()
@@ -92,7 +92,7 @@ const nuevoPassword= async(req,res)=>{
         const usuarioBD = await Usuarios.findOne({token:req.params.token})
         if(usuarioBD?.token !== req.params.token) return res.status(404).json({msg:"Lo sentimos, no se puede validar la cuenta"})
         usuarioBD.token = null
-        usuarioBD.password = await usuarioBD.encrypPassword(password)
+        usuarioBD.password = await usuarioBD.encryptPassword(password)
         await usuarioBD.save()
         res.status(200).json({msg:"Felicitaciones, ya puedes iniciar sesión con tu nuevo password"}) 
     } catch (error) {

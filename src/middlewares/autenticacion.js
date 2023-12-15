@@ -24,26 +24,26 @@ if(!req.headers.authorization) return res.status(404).json({msg:"Lo sentimos, de
     }
 }
 
-// const verificarAutenticacionAdmin = async (req,res,next)=>{
-//     if(!req.headers.authorization) return res.status(404).json({msg:"Lo sentimos, debes proprocionar un token"})    
-//     const {authorization} = req.headers
-//     try {
-//         const {id,rol} = jwt.verify(authorization.split(' ')[1],process.env.JWT_SECRET)
-//         if (rol==="Admin"){
-//             req.usuarioBD = await Usuarios.findById(id).lean().select("-password")
-//             next()
-//         } else {
-//             return res.status(404).json({msg:"Lo sentimos, no tienes permisos para realizar esta acción"})
-//         }
-//     } catch (error) {
-//         const e = new Error("Formato del token no válido")
-//         return res.status(404).json({msg:e.message})
-//     }
-// }
+const accesoExclusivoAdmin = async (req,res,next)=>{
+    if(!req.headers.authorization) return res.status(404).json({msg:"Se requiere un token de administrador"})    
+    const {authorization} = req.headers
+    try {
+        const {id,rol} = jwt.verify(authorization.split(' ')[1],process.env.JWT_SECRET)
+        if (rol==="Admin"){
+            req.usuarioBD = await Usuarios.findById(id).lean().select("-password")
+            next()
+        } else {
+            return res.status(404).json({msg:"Lo sentimos, no tienes permisos para realizar esta acción"})
+        }
+    } catch (error) {
+        const e = new Error("Token no válido")
+        return res.status(404).json({msg:e.message})
+    }
+}
 
-// export {
-//     verificarAutenticacionCliente,
-//     verificarAutenticacionAdmin
-// }
+export {
+    verificarAutenticacion,
+    accesoExclusivoAdmin
+}
 
-export default verificarAutenticacion
+// export default verificarAutenticacion
