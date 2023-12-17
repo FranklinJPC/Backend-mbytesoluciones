@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {verificarAutenticacion} from "../middlewares/autenticacion.js";
+import {verificarAutenticacion, accesoExclusivoAdmin} from "../middlewares/autenticacion.js";
 import {
     crearCategoria,
     obtenerCategorias,
@@ -10,10 +10,10 @@ import {
 
 const router = Router();
 
-router.post("/categoria/nueva", verificarAutenticacion, crearCategoria);
+router.post("/categoria/nueva", accesoExclusivoAdmin, crearCategoria);
 router.get("/categorias", obtenerCategorias);
 router.get("/categoria/detalle/:id", verificarAutenticacion, obtenerCategoriasDetalles);
-router.put("/categoria/actualizar/:id", verificarAutenticacion, actualizarCategoria);
-router.delete("/categoria/eliminar/:id", verificarAutenticacion, eliminarCategoria);
+router.put("/categoria/actualizar/:id", accesoExclusivoAdmin, actualizarCategoria);
+router.delete("/categoria/eliminar/:id", accesoExclusivoAdmin, eliminarCategoria);
 
 export default router;
