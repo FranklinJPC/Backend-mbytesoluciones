@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-const categoriaSchema = ({
+const categoriaSchema = new Schema({
     nombre: {
         type: String,
         require: true,

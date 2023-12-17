@@ -1,4 +1,5 @@
 import Usuarios from "../models/Usuarios.js"
+import Clientes from "../models/Clientes.js"
 import {sendMailToUser, sendMailToRecoveryPassword} from "../config/nodemailer.js"
 import generarJWT from "../helpers/createJWT.js"
 
@@ -23,7 +24,7 @@ const login = async (req,res)=>{
 }
 const registro = async (req,res)=>{
     try {
-        const {correo,contrasenia} = req.body
+        const {correo,contrasenia, nombre, apellido} = req.body
         if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
         const verificarEmailBDD = await Usuarios.findOne({correo})
         if(verificarEmailBDD) return res.status(400).json({msg:"Lo sentimos, el email ya se encuentra registrado"})
@@ -32,6 +33,8 @@ const registro = async (req,res)=>{
         
         const token = nuevoUsuario.createToken()
         await sendMailToUser(correo, token)
+        const nuevoCliente = new Clientes({nombre,apellido,correo,usuario:nuevoUsuario._id})
+        await nuevoCliente.save()
         await nuevoUsuario.save()
         res.status(200).json({msg:"Revisa tu correo electrónico para confirmar tu cuenta"})
     } catch (error) {
@@ -53,16 +56,13 @@ const confirmEmail = async(req,res)=>{
         res.status(500).json({msg:"Lo sentimos, ha ocurrido un error"})
     }
 }
-const actualizarPassword = (req,res)=>{
-    res.status(200).json({res:'actualizar password de un veterinario registrado'})
-}
 const recuperarPassword= async(req,res)=>{
     try {
-        const {email: correo} = req.body
+        const {correo} = req.body
         if (Object.values(req.body).includes("")) return res.status(404).json({msg:"Lo sentimos, debes llenar todos los campos"})
-        const usuarioBD = await Usuarios.findOne({email: correo})
+        const usuarioBD = await Usuarios.findOne({correo: correo})
         if(!usuarioBD) return res.status(404).json({msg:"Lo sentimos, el usuario no se encuentra registrado"})
-        const token = usuarioBD.crearToken()
+        const token = usuarioBD.createToken()
         usuarioBD.token=token
         await sendMailToRecoveryPassword(correo,token)
         await usuarioBD.save()
@@ -92,7 +92,7 @@ const nuevoPassword= async(req,res)=>{
         const usuarioBD = await Usuarios.findOne({token:req.params.token})
         if(usuarioBD?.token !== req.params.token) return res.status(404).json({msg:"Lo sentimos, no se puede validar la cuenta"})
         usuarioBD.token = null
-        usuarioBD.password = await usuarioBD.encrypPassword(password)
+        usuarioBD.password = await usuarioBD.encryptPassword(password)
         await usuarioBD.save()
         res.status(200).json({msg:"Felicitaciones, ya puedes iniciar sesión con tu nuevo password"}) 
     } catch (error) {
@@ -105,7 +105,6 @@ export {
     login,
     registro,
     confirmEmail,
-    actualizarPassword,
 	recuperarPassword,
     comprobarTokenPasword,
 	nuevoPassword

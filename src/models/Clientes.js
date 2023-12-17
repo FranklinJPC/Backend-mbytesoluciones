@@ -1,11 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
-const clienteSchema = ({
-    cedula: {
-        type: Number,
-        require: true,
-        trim: true,
-        maxlength: 11
-    },
+const clienteSchema = new Schema({
     nombre: {
         type: String,
         require: true,
@@ -24,7 +18,7 @@ const clienteSchema = ({
         trim: true,
         maxlength: 10
     },
-    email: {
+    correo: {
         type: String,
         require: true,
         trim: true,
