@@ -13,7 +13,7 @@ import {
 router.post("/login", login);
 router.post("/registro", registro);
 router.get("/confirmar/:token", confirmEmail);
-router.get("/recuperar-password", recuperarPassword);
+router.post("/recuperar-password", recuperarPassword);
 router.get("/recuperar-password/:token", comprobarTokenPasword);
 router.post("/nuevo-password/:token", nuevoPassword);
 
