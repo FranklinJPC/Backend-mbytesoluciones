@@ -24,7 +24,7 @@ const login = async (req,res)=>{
 }
 const registro = async (req,res)=>{
     try {
-        const {correo,contrasenia, nombre, apellido} = req.body
+        const {correo,contrasenia, nombre, apellido, telefono, direccion } = req.body
         if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
         const verificarEmailBDD = await Usuarios.findOne({correo})
         if(verificarEmailBDD) return res.status(400).json({msg:"Lo sentimos, el email ya se encuentra registrado"})
@@ -33,7 +33,7 @@ const registro = async (req,res)=>{
         
         const token = nuevoUsuario.createToken()
         await sendMailToUser(correo, token)
-        const nuevoCliente = new Clientes({nombre,apellido,correo,usuario:nuevoUsuario._id})
+        const nuevoCliente = new Clientes({nombre,apellido,correo, telefono, direccion ,usuario:nuevoUsuario._id})
         await nuevoCliente.save()
         await nuevoUsuario.save()
         res.status(200).json({msg:"Revisa tu correo electrónico para confirmar tu cuenta"})
