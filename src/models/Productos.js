@@ -15,6 +15,17 @@ const productoSchema = new Schema({
         default: 0,
         require: true
     },
+    precio_venta:{
+        type: Number,
+        trim: true,
+        default: 0,
+        require: true
+    },
+    marca: {
+        type: String,
+        trim: true,
+        require: true
+    },
     cantidad: {
         type: Number,
         trim: true,
@@ -25,6 +36,10 @@ const productoSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: "Categoria",
         require: true
+    },
+    fecha_ingreso: {
+        type: Date,
+        default: Date.now
     },
 
 }, {

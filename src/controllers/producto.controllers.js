@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const crearProducto = async (req, res) => {
     try {
-        const { nombre, descripcion, precio, imagen, categoria } = req.body;
+        const { nombre, imagen, categoria } = req.body;
         if (Object.values(req.body).includes(""))
         return res
             .status(400)
