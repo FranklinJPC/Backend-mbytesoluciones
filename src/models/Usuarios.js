@@ -5,24 +5,25 @@ const usuarioSchema = new Schema({
         type: String,
         require: true,
         trim: true,
-        maxlength: 30
+        maxlength: 20
     },
     apellido: {
         type: String,
         require: true,
         trim: true,
-        maxlength: 30
+        maxlength: 50
     },
     correo: {
         type: String,
         require: true,
         trim: true,
-        maxlength: 30
+        maxlength: 50
     },
     contrasenia: {
         type: String,
         require: true,
         trim: true,
+        maxlength: 20
     },
     token: {
         type: String,
