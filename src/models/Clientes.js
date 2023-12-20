@@ -4,19 +4,19 @@ const clienteSchema = new Schema({
         type: String,
         require: true,
         trim: true,
-        maxlength: 30
+        maxlength: 20
     },
     apellido: {
         type: String,
         require: true,
         trim: true,
-        maxlength: 30
+        maxlength: 50
     },
     direccion: {
         type: String,
         require: true,
         trim: true,
-        maxlength: 10
+        maxlength: 100
     },
     correo: {
         type: String,
