@@ -1,6 +1,8 @@
 import Productos from "../models/Productos.js";
 import Categorias from "../models/Categorias.js";
 import mongoose from "mongoose";
+import {uploadImage, deleteImage} from "../config/cloudinary.js";
+import fs from "fs-extra";
 
 const crearProducto = async (req, res) => {
     try {
@@ -20,6 +22,14 @@ const crearProducto = async (req, res) => {
             .status(400)
             .json({ msg: "Lo sentimos, la categoria no se encuentra registrada" });
         const nuevoProducto = new Productos(req.body);
+        // Imagen
+        if(!req.files?.imagen) return res.status(400).json({msg:"Lo sentimos, debes subir una imagen"})
+        const imagenBDD = await uploadImage(req.files.imagen.tempFilePath)
+        nuevoProducto.imagen = {
+            public_id: imagenBDD.public_id,
+            secure_url: imagenBDD.secure_url
+        }
+        await fs.unlink(req.files.imagen.tempFilePath);
         await nuevoProducto.save();
         res.status(200).json({ msg: "Producto registrado con éxito" });
     } catch (error) {
@@ -56,7 +66,32 @@ const actualizarProducto = async (req, res) => {
         return res
             .status(400)
             .json({ msg: "Lo sentimos, la categoria no se encuentra registrada" }); 
-        await Productos.findByIdAndUpdate(verificarProducto._id, req.body);
+
+        // Imagen Actulizar
+        if(req.files?.imagen){
+            if(!(req.files?.imagen)) return res.status(400).json({msg:"Lo sentimos, debes subir una imagen"})
+            await deleteImage(verificarProducto.imagen.public_id)
+            const imagenBDD = await uploadImage(req.files.imagen.tempFilePath)
+            data = {
+                nombre: req.body.nombre || verificarProducto.nombre,
+                descripcion: req.body.descripcion || verificarProducto.descripcion,
+                precio: req.body.precio || verificarProducto.precio,
+                precio_venta: req.body.precio_venta || verificarProducto.precio_venta,
+                marca: req.body.marca || verificarProducto.marca,
+                cantidad: req.body.cantidad || verificarProducto.cantidad,
+                categoria: req.body.categoria || verificarProducto.categoria,
+                imagen: {
+                    public_id: imagenBDD.public_id,
+                    secure_url: imagenBDD.secure_url
+                }
+            }
+            await fs.unlink(req.files.imagen.tempFilePath);
+            await Productos.findByIdAndUpdate(req.params.id, data);
+        }
+        else{
+            const data = req.body;
+            await Productos.findByIdAndUpdate(req.params.id, data);
+        }
         res.status(200).json({ msg: "Producto actualizado con éxito" });
     } catch (error) {
         console.log(error);
@@ -73,6 +108,7 @@ const eliminarProducto = async (req, res) => {
             .status(400)
             .json({ msg: "Lo sentimos, el producto no se encuentra registrado" });
         await Productos.findByIdAndDelete(verificarProducto._id);
+        await deleteImage(verificarProducto.imagen.public_id);
         res.status(200).json({ msg: "Producto eliminado con éxito" });
     } catch (error) {
         console.log(error);
@@ -91,11 +127,39 @@ const obtenerProducto = async (req, res) => {
         res.status(500).json({ msg: "Lo sentimos, ha ocurrido un error" });
     }
 }
+const crearImagenPrueba = async (req, res) => {
+    try {
+        const data = {
+            nombre: "Prueba2",
+            descripcion: "Prueba",
+            precio: 1,
+            precio_venta: 1,
+            marca: "Prueba",
+            cantidad: 1,
+            categoria: "60b5d7b4c4a0a52d3c7e2e3b"
+        }
+        // Imagen
+        if(!req.files?.imagen) return res.status(400).json({msg:"Lo sentimos, debes subir una imagen"})
+        const imagenBDD = await uploadImage(req.files.imagen.tempFilePath)
+        const nuevoProducto = new Productos(data);
+        nuevoProducto.imagen = {
+            public_id: imagenBDD.public_id,
+            secure_url: imagenBDD.secure_url
+        }
+        await fs.unlink(req.files.imagen.tempFilePath);
+        await nuevoProducto.save();
+        res.status(200).json({ msg: "Producto registrado con éxito" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "Lo sentimos, ha ocurrido un error" }); 
+    }
+}
 
 export { 
     crearProducto, 
     obtenerProductos, 
     actualizarProducto, 
     eliminarProducto,
-    obtenerProducto 
+    obtenerProducto,
+    crearImagenPrueba
 };

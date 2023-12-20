@@ -22,8 +22,7 @@ const usuarioSchema = new Schema({
     contrasenia: {
         type: String,
         require: true,
-        trim: true,
-        maxlength: 20
+        trim: true
     },
     token: {
         type: String,

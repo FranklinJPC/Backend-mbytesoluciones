@@ -41,6 +41,10 @@ const productoSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    imagen: {
+        public_id:String,
+        secure_url:String
+    },
 
 }, {
     timestamps: true
