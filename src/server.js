@@ -1,6 +1,7 @@
 import Express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fileUpload from "express-fileupload";
 import routeUsuarios from './routes/usuario.routes.js';
 import routeProductos from './routes/producto.routes.js';
 import routeCategorias from './routes/categoria.routes.js';
@@ -14,6 +15,10 @@ app.use(cors())
 
 app.use(Express.json())
 
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp',
+}))
 app.get('/', (req, res) => {res.status(200).json({msg: "Servidor Encendido"})});
 // Rutass
 app.use('/api', routeUsuarios);
