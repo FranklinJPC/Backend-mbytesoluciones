@@ -89,8 +89,7 @@ const actualizarProducto = async (req, res) => {
             await Productos.findByIdAndUpdate(req.params.id, data);
         }
         else{
-            const data = req.body;
-            await Productos.findByIdAndUpdate(req.params.id, data);
+            await Productos.findByIdAndUpdate(req.params.id, req.body);
         }
         res.status(200).json({ msg: "Producto actualizado con éxito" });
     } catch (error) {

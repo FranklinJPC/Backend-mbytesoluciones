@@ -1,4 +1,5 @@
 import Categorias from "../models/Categorias.js";
+import Productos from "../models/Productos.js";
 
 const crearCategoria = async (req, res) => {
     try {
@@ -70,6 +71,11 @@ const eliminarCategoria = async (req, res) => {
             return res
                 .status(400)
                 .json({ msg: "Lo sentimos, la categoria no se encuentra registrada" });
+        const verificarProducto = await Productos.findOne({ categoria: verificarCategoria._id });
+        if (verificarProducto)
+            return res
+                .status(400)
+                .json({ msg: "Lo sentimos, la categoria no se puede eliminar porque tiene productos asociados" });
         await Categorias.findByIdAndDelete(verificarCategoria._id);
         res.status(200).json({ msg: "Categoria eliminada con éxito" });       
     } catch (error) {
