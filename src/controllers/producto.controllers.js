@@ -72,7 +72,7 @@ const actualizarProducto = async (req, res) => {
             if(!(req.files?.imagen)) return res.status(400).json({msg:"Lo sentimos, debes subir una imagen"})
             await deleteImage(verificarProducto.imagen.public_id)
             const imagenBDD = await uploadImage(req.files.imagen.tempFilePath)
-            data = {
+            const data = {
                 nombre: req.body.nombre || verificarProducto.nombre,
                 descripcion: req.body.descripcion || verificarProducto.descripcion,
                 precio: req.body.precio || verificarProducto.precio,
