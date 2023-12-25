@@ -7,7 +7,8 @@ const pedidoSchema = ({
     fecha: {
         type: Date,
         require: true,
-        trim: true
+        trim: true,
+        default: Date.now()
     },
     estado: {
         type: String,

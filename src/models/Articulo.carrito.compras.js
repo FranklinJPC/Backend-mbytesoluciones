@@ -1,20 +1,17 @@
-import mongoose, { Schema, model } from "mongoose";
-const artCarritoSchema = ({
-    id_carrito: {
-        type: mongoose.Types.ObjectId,
-        ref: "Carrito"
-    },
-    id_producto: {
-        type: mongoose.Types.ObjectId,
-        ref: "Producto"
-    },
-    cantidad: {
-        type: Number,
-        trim: true,
-        default: 0
-    }
-}, {
-    timestamps: true
-})
+import CarritoCompras from "./Carrito.compras.js";
+const carrito = async () => {
+    const carrito = await CarritoCompras.find().populate({
+        path: "items.id_producto",
+        select: "nombre precio_venta total"
+    })
+    return carrito[0];
+}
+const agregarProducto = async carga => {
+    const nuevoProducto = await CarritoCompras.create(carga);
+    return nuevoProducto;
+}
 
-export default model("ArtCarrito", artCarritoSchema)
+export {
+    carrito,
+    agregarProducto
+}
