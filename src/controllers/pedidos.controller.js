@@ -38,9 +38,9 @@ const crearPedido = async (req, res) => {
 const visulizarPedido = async (req, res) => {
     const usuarioBD = await Clientes.findOne({ usuario: req.usuarioBD._id });
     try {
-        const pedidoBD = await Pedidos.findOne({ cliente: usuarioBD._id, estado: 'Pendiente' });
+        const pedidoBD = await Pedidos.findOne({ cliente: usuarioBD._id });
         if (!pedidoBD) return res.status(400).json({ mensaje: 'No existe un pedido pendiente' });
-        res.status(200).json({ mensaje: 'Pedido pendiente', pedidoBD });
+        res.status(200).json({ mensaje: `Pedido ${pedidoBD.estado}`, pedidoBD });
     } catch (error) {
         console.log(error);
         res.status(500).json({ mensaje: 'Error al visualizar el pedido' });
@@ -51,15 +51,30 @@ const visulizarPedidos = async (req, res) => {
     try {
         const pedidosBD = await Pedidos.find();
         if (!pedidosBD) return res.status(400).json({ mensaje: 'No existen pedidos' });
-        res.status(200).json({ mensaje: 'Pedidos pendientes', pedidosBD });
+        res.status(200).json({ mensaje: 'Pedidos', pedidosBD });
     } catch (error) {
         console.log(error);
         res.status(500).json({ mensaje: 'Error al visualizar los pedidos' });
     }
 }
 
+const actualizarPedido = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const pedidoBD = await Pedidos.findById(id);
+        if (!pedidoBD) return res.status(400).json({ mensaje: 'No existe el pedido' });
+        pedidoBD.estado = req.body.estado;
+        await pedidoBD.save();
+        res.status(200).json({ mensaje: 'Pedido actualizado', pedidoBD });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ mensaje: 'Error al actualizar el pedido' });
+    }
+}
+
 export {
     crearPedido,
     visulizarPedido,
-    visulizarPedidos
+    visulizarPedidos,
+    actualizarPedido
 }
