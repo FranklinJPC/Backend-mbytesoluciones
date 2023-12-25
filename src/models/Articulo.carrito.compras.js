@@ -2,7 +2,7 @@ import CarritoCompras from "./Carrito.compras.js";
 const carrito = async () => {
     const carrito = await CarritoCompras.find().populate({
         path: "items.id_producto",
-        select: "nombre precio_venta total"
+        select: "nombre precio_venta total imagen"
     })
     return carrito[0];
 }
