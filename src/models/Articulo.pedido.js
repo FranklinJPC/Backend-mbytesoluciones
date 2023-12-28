@@ -1,7 +1,7 @@
 import Pedidos from "./Pedidos.js";
 const pedido = async () => {
     const pedido = await Pedidos.find().populate({
-        path: "items.producto",
+        path: "items.id_producto",
         select: "nombre precio_venta total imagen"
     })
     return pedido;

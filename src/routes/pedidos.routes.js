@@ -4,13 +4,15 @@ import {
     crearPedido,
     visulizarPedido,
     visulizarPedidos,
-    actualizarPedido
+    actualizarPedido,
+    historialPedidos
 } from "../controllers/pedidos.controller.js";
 const router = Router();
 
 // Clientes
 router.post("/crear-pedido", verificarAutenticacion, crearPedido);
-router.get("/visualizar-pedido", verificarAutenticacion, visulizarPedido);
+router.get("/visualizar-pedido/:id", verificarAutenticacion, visulizarPedido);
+router.get("/historial-pedidos", verificarAutenticacion, historialPedidos);
 
 // Admin
 router.get("/visualizar-pedidos", accesoExclusivoAdmin, visulizarPedidos);

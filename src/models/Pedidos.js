@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from "mongoose";
 const itemPedidoSchema = new Schema({
-    producto: {
+    id_producto: {
         type: mongoose.Types.ObjectId,
         ref: "Producto"
     },
@@ -40,6 +40,10 @@ const pedidoSchema = new Schema({
         require: true,
         trim: true,
         default: Date.now()
+    },
+    fecha_finalizada: {
+        type: Date,
+        trim: true
     },
     estado: {
         type: String,
