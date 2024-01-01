@@ -15,10 +15,19 @@ const crearPedido = async (req, res) => {
         else if (carritoBD.estado === false) return res.status(400).json({ mensaje: 'El carrito no tiene productos' });
         else if (carritoBD.id_cliente.toString() !== usuarioBD._id.toString()) return res.status(400).json({ mensaje: 'El carrito no pertenece al usuario' });
         const verificarPedido = await Pedidos.findOne({ cliente: usuarioBD._id, estado: 'Pendiente' });
+        // Validaciones
         if (verificarPedido) return res.status(400).json({ mensaje: 'Ya existe un pedido pendiente' });
+        if (req.body.domicilio !== 0 && req.body.domicilio !== 1) return res.status(400).json({ mensaje: 'El domicilio no es válido, utilice el formato booleano, 0 o 1' });
+        if (req.body.domicilio === 1 && !req.body.observaciones) return res.status(400).json({ mensaje: 'La dirección es obligatoria en observaciones' });
+        if (!req.body.forma_pago) return res.status(400).json({ mensaje: 'La forma de pago es obligatoria' });
+        if (req.body.forma_pago !== 'Transferencia Bancaria' && req.body.forma_pago !== 'Pago en Efectivo') return res.status(400).json({ mensaje: 'La forma de pago no es válida, solo mediante: Pago en Efectivo o Transferencia Bancaria' });
+        if (!req.body.observaciones) req.body.observaciones = 'Sin observaciones';
         const nuevoPedido = {
             cliente: usuarioBD,
             items: carritoBD.items,
+            domicilio: req.body.domicilio,
+            observaciones: req.body.observaciones,
+            forma_pago: req.body.forma_pago,
             total: carritoBD.subtotal
         }
         console.log(pedidoBD)
@@ -114,6 +123,8 @@ const actualizarPedido = async (req, res) => {
         // console.log(pedidoBD.cliente)
         // console.log(usuarioBD.correo)
         // console.log(req.body.estado)
+
+        // Correo de notificación
         await sendMailNotifyOrder(usuarioBD.correo, req.body.estado);
         await pedidoBD.save();
         res.status(200).json({ mensaje: 'Pedido actualizado', pedidoBD });

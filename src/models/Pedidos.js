@@ -35,6 +35,22 @@ const pedidoSchema = new Schema({
         ref: "Clientes"
     },
     items: [itemPedidoSchema],
+    domicilio: {
+        type: Boolean,
+        trim: true,
+        default: false,
+        require: [true, "El domicilio es obligatorio"]
+    },
+    observaciones: {
+        type: String,
+        trim: true,
+        default: "Sin observaciones"
+    },
+    forma_pago: {
+        type: String,
+        trim: true,
+        require: [true, "La forma de pago es obligatoria"]
+    },
     fecha: {
         type: Date,
         require: true,
