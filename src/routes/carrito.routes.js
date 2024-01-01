@@ -14,6 +14,8 @@ const router = Router();
 router.post("/carrito/agregar", verificarAutenticacion, aniadirProductos);
 router.delete("/carrito/eliminar", verificarAutenticacion, vaciarCarrito);
 router.get("/carrito/detalle", verificarAutenticacion, verCarrito);
+
+// id del producto
 router.delete("/carrito/eliminar-producto/:id", verificarAutenticacion, eliminarProducto);
 router.put("/carrito/actualizar-cantidad/:id", verificarAutenticacion, actulizarCantidad);
 
