@@ -26,6 +26,7 @@ const productoSchema = new Schema({
         trim: true,
         require: true
     },
+    // TODO: Cambiar el nombre de dato a stock
     cantidad: {
         type: Number,
         trim: true,
