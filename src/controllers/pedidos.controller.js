@@ -138,7 +138,10 @@ const historialPedidos = async (req, res) => {
     const usuarioBD = await Clientes.findOne({ usuario: req.usuarioBD._id });
     try {
         if (!usuarioBD) return res.status(400).json({ mensaje: 'El usuario no existe' });
-        const pedidosBD = await Pedidos.find({ cliente: usuarioBD._id });
+        const pedidosBD = await Pedidos.find({ cliente: usuarioBD._id }).populate({
+            path: "items.id_producto",
+            select: "nombre"
+        }).select('-__v -updatedAt -createdAt');
         if (!pedidosBD) return res.status(400).json({ mensaje: 'No existen pedidos' });
         res.status(200).json({ mensaje: 'Pedidos', pedidosBD });
     } catch (error) {
