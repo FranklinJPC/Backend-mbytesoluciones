@@ -34,7 +34,7 @@ const usuarioSchema = new Schema({
     },
     estado: {
         type: Boolean,
-        default: true
+        default: false
     },
     tipo_cuenta: {
         type: String,
@@ -54,6 +54,10 @@ usuarioSchema.methods.matchPasswords = async function(contrasenia){
 }
 usuarioSchema.methods.createToken = function(){
     const generarToken = this.token = Math.random().toString(36).slice(2)
+    // TODO: Expiracion de token
+    // const fechaExpiracion = new Date()
+    // fechaExpiracion.setHours(fechaExpiracion.getHours()+1)
+    // this.tokenExpires = fechaExpiracion
     return generarToken
 }
 

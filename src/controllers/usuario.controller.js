@@ -49,6 +49,7 @@ const confirmEmail = async(req,res)=>{
         if(!usuarioBD?.token) return res.status(404).json({msg:"La cuenta ya ha sido confirmada"})
         usuarioBD.token = null
         usuarioBD.confirmEmail=true
+        usuarioBD.estado=true
         await usuarioBD.save()
         res.status(200).json({msg:"Token confirmado, ya puedes iniciar sesión"}) 
     } catch (error) {
