@@ -154,11 +154,33 @@ const crearImagenPrueba = async (req, res) => {
     }
 }
 
+const obtenerProductosPorMarcas = async (req, res) => {
+    try {
+        const productos = await Productos.find({}).where({ estado: true }).select("-__v -createdAt -updatedAt");
+        const marcas = [];
+        productos.forEach(producto => {
+            if (!marcas.includes(producto.marca)) {
+                marcas.push(producto.marca);
+            }
+        });
+        const productosPorMarca = [];
+        marcas.forEach(marca => {
+            const productosDeMarca = productos.filter(producto => producto.marca === marca);
+            productosPorMarca.push({ marca, productos: productosDeMarca });
+        });
+        res.status(200).json({ productosPorMarca });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "Lo sentimos, ha ocurrido un error" });
+    }
+}
+
 export { 
     crearProducto, 
     obtenerProductos, 
     actualizarProducto, 
     eliminarProducto,
     obtenerProducto,
-    crearImagenPrueba
+    crearImagenPrueba,
+    obtenerProductosPorMarcas
 };

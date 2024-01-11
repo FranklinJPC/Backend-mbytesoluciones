@@ -14,9 +14,11 @@ const crearPedido = async (req, res) => {
         if (!carritoBD) return res.status(400).json({ mensaje: 'El carrito no existe' });
         else if (carritoBD.estado === false) return res.status(400).json({ mensaje: 'El carrito no tiene productos' });
         else if (carritoBD.id_cliente.toString() !== usuarioBD._id.toString()) return res.status(400).json({ mensaje: 'El carrito no pertenece al usuario' });
-        const verificarPedido = await Pedidos.findOne({ cliente: usuarioBD._id, estado: 'Pendiente' });
+        const verificarPedido = await Pedidos.countDocuments({ cliente: usuarioBD._id, estado: 'Pendiente' });
         // Validaciones
-        if (verificarPedido) return res.status(400).json({ mensaje: 'Ya existe un pedido pendiente' });
+        console.log(verificarPedido)
+
+        if (verificarPedido >= 3) return res.status(400).json({ mensaje: 'El limite de pedidos es de 3 por cliente' });
         if (req.body.domicilio !== 0 && req.body.domicilio !== 1) return res.status(400).json({ mensaje: 'El domicilio no es válido, utilice el formato booleano, 0 o 1' });
         if (req.body.domicilio === 1 && !req.body.observaciones) return res.status(400).json({ mensaje: 'La dirección es obligatoria en observaciones' });
         if (!req.body.forma_pago) return res.status(400).json({ mensaje: 'La forma de pago es obligatoria' });
@@ -30,7 +32,7 @@ const crearPedido = async (req, res) => {
             forma_pago: req.body.forma_pago,
             total: carritoBD.subtotal
         }
-        console.log(pedidoBD)
+        // console.log(pedidoBD)
         const pedido = await agregarPedido(nuevoPedido);
         res.status(200).json({ mensaje: 'Pedido creado con éxito', pedido });
 
