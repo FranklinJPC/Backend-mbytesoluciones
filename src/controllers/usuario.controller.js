@@ -93,7 +93,7 @@ const nuevoPassword= async(req,res)=>{
         const usuarioBD = await Usuarios.findOne({token:req.params.token})
         if(usuarioBD?.token !== req.params.token) return res.status(404).json({msg:"Lo sentimos, no se puede validar la cuenta"})
         usuarioBD.token = null
-        usuarioBD.password = await usuarioBD.encryptPassword(password)
+        usuarioBD.contrasenia = await usuarioBD.encryptPassword(password)
         await usuarioBD.save()
         res.status(200).json({msg:"Felicitaciones, ya puedes iniciar sesión con tu nuevo password"}) 
     } catch (error) {
