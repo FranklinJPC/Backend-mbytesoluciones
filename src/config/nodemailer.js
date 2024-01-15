@@ -22,7 +22,7 @@ const sendMailToUser = async(userMail,token)=>{
         `
         <h1>Mbytes Soluciones tecnologicas</h1>
         <hr>
-        <a href="https://mbytesoluciones.com/nuevo/confirmarEmail.php?token=${token}">Clic para confirmar tu cuenta</a>
+        <a href="https://mbytesoluciones.com/confirmarEmail.php?token=${token}">Clic para confirmar tu cuenta</a>
         <hr>
         <footer>Bienvenido!!</footer>
         `
@@ -41,7 +41,7 @@ const sendMailToRecoveryPassword = async(userMail,token)=>{
     html: `
     <h1>Mbytes Soluciones tecnologicas</h1>
     <hr>
-    <a href="https://mbytesoluciones.com/nuevo/nuevoPassword.php?token=${token}">Clic para reestablecer tu contraseña</a>
+    <a href="https://mbytesoluciones.com/nuevoPassword.php?token=${token}">Clic para reestablecer tu contraseña</a>
     <hr>
     <footer>Soluciones y productos</footer>
     `

@@ -129,13 +129,13 @@ const obtenerProducto = async (req, res) => {
 const crearImagenPrueba = async (req, res) => {
     try {
         const data = {
-            nombre: "Prueba2",
-            descripcion: "Prueba",
-            precio: 1,
-            precio_venta: 1,
-            marca: "Prueba",
-            cantidad: 1,
-            categoria: "60b5d7b4c4a0a52d3c7e2e3b"
+            nombre: "Laptop",
+            descripcion: "Una laptop de prueba",
+            precio: 1000,
+            precio_venta: 1050,
+            marca: "Samsung",
+            cantidad: 10,
+            categoria: "657f69221d6cfd4216f91302"
         }
         // Imagen
         if(!req.files?.imagen) return res.status(400).json({msg:"Lo sentimos, debes subir una imagen"})
