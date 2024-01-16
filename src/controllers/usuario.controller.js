@@ -15,7 +15,7 @@ const login = async (req,res)=>{
         if(usuarioBD?.estado===false) return res.status(400).json({msg:"Lo sentimos, tu cuenta esta inactiva"})
         if(!usuarioBD) return res.status(404).json({msg:"Lo sentimos, el usuario no existe"})
         const verificarPassword = await usuarioBD.matchPasswords(contrasenia)
-        if(!verificarPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
+        if(!verificarPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña y/o el correo es incorrecto"})
         // Fin de validaciones
     
         const token = await generarJWT(usuarioBD._id, usuarioBD.tipo_cuenta)
