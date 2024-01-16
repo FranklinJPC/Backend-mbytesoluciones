@@ -3,7 +3,8 @@ import Productos from "../models/Productos.js";
 
 const crearCategoria = async (req, res) => {
     try {
-        const { nombre } = req.body;
+        const { nombre, descripcion } = req.body;
+        // Validaciones
         if (Object.values(req.body).includes(""))
             return res
                 .status(400)
@@ -13,6 +14,13 @@ const crearCategoria = async (req, res) => {
             return res
                 .status(400)
                 .json({ msg: "Lo sentimos, la categoria ya se encuentra registrada" });
+        const nombreTrim = nombre.trim();
+        const descripcionTrim = descripcion.trim();
+        if(nombreTrim === "" || descripcionTrim === "")
+            return res
+                .status(400)
+                .json({ msg: "Lo sentimos, estas llenando los campos con espacios" });
+        // Fin validaciones
         const nuevaCategoria = new Categorias(req.body);
         await nuevaCategoria.save();
         res.status(200).json({ msg: "Categoria registrada con éxito" });
@@ -46,6 +54,7 @@ const obtenerCategoriasDetalles = async (req, res) => {
 const actualizarCategoria = async (req, res) => {
     try {
         const { id } = req.params;
+        // Validaciones
         if (Object.values(req.body).includes(""))
             return res
                 .status(400)
@@ -55,6 +64,13 @@ const actualizarCategoria = async (req, res) => {
             return res
                 .status(400)
                 .json({ msg: "Lo sentimos, la categoria no se encuentra registrada" });
+        const nombreTrim = nombre.trim();
+        const descripcionTrim = descripcion.trim();
+        if(nombreTrim === "" || descripcionTrim === "")
+            return res
+                .status(400)
+                .json({ msg: "Lo sentimos, estas llenando los campos con espacios" });
+        // Fin validaciones
         await Categorias.findByIdAndUpdate(verificarCategoria._id, req.body);
         res.status(200).json({ msg: "Categoria actualizada con éxito" });
     } catch (error) {
@@ -67,6 +83,7 @@ const eliminarCategoria = async (req, res) => {
     try {
         const { id } = req.params;
         const verificarCategoria = await Categorias.findById(id);
+        // Validaciones
         if (!verificarCategoria)
             return res
                 .status(400)
@@ -75,7 +92,8 @@ const eliminarCategoria = async (req, res) => {
         if (verificarProducto)
             return res
                 .status(400)
-                .json({ msg: "Lo sentimos, la categoria no se puede eliminar porque tiene productos asociados" });
+                .json({ msg: "Lo sentimos, la categoria no se puede eliminar porque tiene productos asociados, actualice la categoria de esos productos" });
+        // Fin validaciones
         await Categorias.findByIdAndDelete(verificarCategoria._id);
         res.status(200).json({ msg: "Categoria eliminada con éxito" });       
     } catch (error) {
