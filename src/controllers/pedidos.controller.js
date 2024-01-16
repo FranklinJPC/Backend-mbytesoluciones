@@ -104,6 +104,7 @@ const actualizarPedido = async (req, res) => {
     try {
         const { id } = req.params;
         const pedidoBD = await Pedidos.findById(id);
+        // Validaciones
         if (!pedidoBD) return res.status(400).json({ mensaje: 'No existe el pedido' });
         if (pedidoBD.estado === 'Finalizado' || pedidoBD.estado === 'Anulado') 
         return res.status(400).json({ mensaje: 'El pedido ya fue finalizado o anulado' });
@@ -121,6 +122,7 @@ const actualizarPedido = async (req, res) => {
             pedidoBD.fecha_finalizada = Date.now();
         }
         else return res.status(400).json({ mensaje: 'El estado no es válido' });
+        // Fin de validaciones
         const usuarioBD = await Clientes.findById(pedidoBD.cliente);
         // console.log(pedidoBD.cliente)
         // console.log(usuarioBD.correo)

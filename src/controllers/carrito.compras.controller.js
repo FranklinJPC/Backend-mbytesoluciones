@@ -9,6 +9,7 @@ const aniadirProductos = async (req, res) => {
     try {
         let Carrito = await carrito(usuarioBD._id);
         const productoBDD = await Producto.findById(id_producto);
+        // Validaciones
         if (!productoBDD) 
         return res
             .status(400)
@@ -17,6 +18,10 @@ const aniadirProductos = async (req, res) => {
         return res
             .status(400)
             .json({ mensaje: "No hay suficiente stock" });
+        if (cantidad == "") return res.status(400).json({ mensaje: 'La cantidad es obligatoria' });
+        if (cantidad <= 0) return res.status(400).json({ mensaje: 'La cantidad debe ser mayor a 0' });
+        if (cantidad == null || id_producto == null) return res.status(400).json({ mensaje: 'Los campos son obligatorios' });
+        // Fin validaciones
         if(Carrito){
             const verificarIndex = Carrito.items.findIndex(item => item.id_producto.id == id_producto);
             Carrito.estado = true;

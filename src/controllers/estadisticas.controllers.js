@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 import Usuarios from "../models/Usuarios.js";
 import Pedidos from "../models/Pedidos.js";
-import CalendarioEventos from "../models/Calendario.eventos.js";
 
 const obtenerEstadisticas = async (req, res) => {
     try {
-        const eventosProximos = await CalendarioEventos.find({ fecha: { $gte: new Date() } }).sort({ fecha: 1 }).limit(3).select("-__v -createdAt -updatedAt -fecha_inicio -fecha_fin -hora_inicio -hora_fin");
         const usuarios_registrados = await Usuarios.find({ estado: true }).countDocuments();
         const pedidos = await Pedidos.find({});
         const NroPedidos = await Pedidos.find({}).countDocuments();
@@ -24,7 +22,6 @@ const obtenerEstadisticas = async (req, res) => {
             usuarios_registrados,
             NroPedidos,
             pedidosListaContable,
-            eventosProximos
         }
         res.status(200).json({ mensaje: "Estadisticas", data });
     }

@@ -8,7 +8,6 @@ import routeCategorias from './routes/categoria.routes.js';
 import routeClientes from './routes/cliente.routes.js';
 import routeCarrito from './routes/carrito.routes.js';
 import routePedidos from './routes/pedidos.routes.js';
-import routeCalendario from './routes/calendario.routes.js';
 import cron from "./helpers/verificarBD.js";
 import routerEstadiscticas from "./routes/estadisticas.routes.js";
 
@@ -37,7 +36,6 @@ app.use('/api', routeCategorias);
 app.use('/api', routeClientes);
 app.use('/api', routeCarrito);
 app.use('/api', routePedidos);
-app.use('/api', routeCalendario);
 app.use('/api', routerEstadiscticas);
 
 app.use((req, res) => {res.status(404).json({msg: "Ruta no encontrada"})});
