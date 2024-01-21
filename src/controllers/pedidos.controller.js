@@ -60,12 +60,15 @@ const visulizarPedido = async (req, res) => {
     const { id } = req.params;
     const usuarioBD = await Clientes.findOne({ usuario: req.usuarioBD._id });
     try {
+        // Validaciones
         if (!usuarioBD) return res.status(400).json({ mensaje: 'El usuario no existe' });
         const pedidoBDD = await Pedidos.findById(id).populate({
             path: "items.id_producto",
             select: "nombre total imagen"
         }).select('-__v  -updatedAt -createdAt');
         if (!pedidoBDD) return res.status(400).json({ mensaje: 'No existe el pedido' });
+        if (pedidoBDD.cliente.toString() !== usuarioBD._id.toString()) return res.status(400).json({ mensaje: 'El pedido no pertenece al usuario' });
+        // Fin de validaciones
         res.status(200).json({ mensaje: `Pedido ${pedidoBDD.estado}`, pedido: pedidoBDD });
     } catch (error) {
         console.log(error);
@@ -124,10 +127,6 @@ const actualizarPedido = async (req, res) => {
         else return res.status(400).json({ mensaje: 'El estado no es válido' });
         // Fin de validaciones
         const usuarioBD = await Clientes.findById(pedidoBD.cliente);
-        // console.log(pedidoBD.cliente)
-        // console.log(usuarioBD.correo)
-        // console.log(req.body.estado)
-
         // Correo de notificación
         await sendMailNotifyOrder(usuarioBD.correo, req.body.estado);
         await pedidoBD.save();
