@@ -70,6 +70,8 @@ const actualizarPassword = async (req, res) => {
         if (nuevaContrasenia === oldercontrasenia) return res.status(400).json({ msg: "La nueva contraseña no puede ser igual a la anterior" });
         const nuevaContraseniatrim = nuevaContrasenia.trim();
         if (nuevaContraseniatrim === "") return res.status(400).json({ msg: "La nueva contraseña no puede contener solo espacios" });
+        const validacionPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){10,}$/;
+        if(!validacionPassword.test(nuevaContrasenia)) return res.status(400).json({msg:"Lo sentimos, el password debe tener mínimo 10 caracteres, una mayúscula, una minúscula, un número y un caracter especial"})
         // Fin de validaciones
         usuarioBD.contrasenia = await usuarioBD.encryptPassword(nuevaContrasenia);
         await usuarioBD.save();

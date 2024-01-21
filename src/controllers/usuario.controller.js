@@ -45,6 +45,9 @@ const registro = async (req,res)=>{
         if(!validacionNumero.test(telefono)) return res.status(400).json({msg:"Lo sentimos, el telefono solo puede contener números sin espacios"})
         const validacionEmail = /\S+@\S+\.\S+/;
         if(!validacionEmail.test(correo)) return res.status(400).json({msg:"Lo sentimos, el email no es válido"})
+        // Validar contraseña
+        const validacionPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){10,}$/;
+        if(!validacionPassword.test(contrasenia)) return res.status(400).json({msg:"Lo sentimos, el password debe tener mínimo 10 caracteres, una mayúscula, una minúscula, un número y un caracter especial"})
         // Fin de validaciones
         const nuevoUsuario = new Usuarios(req.body)
         nuevoUsuario.contrasenia = await nuevoUsuario.encryptPassword(contrasenia)
@@ -79,6 +82,8 @@ const recuperarPassword= async(req,res)=>{
     try {
         const {correo} = req.body
         // Validaciones
+        const validacionEmail = /\S+@\S+\.\S+/;
+        if(!validacionEmail.test(correo)) return res.status(400).json({msg:"Lo sentimos, el email no es válido"})
         if (Object.values(req.body).includes("")) return res.status(404).json({msg:"Lo sentimos, debes llenar todos los campos"})
         const usuarioBD = await Usuarios.findOne({correo: correo})
         if(!usuarioBD) return res.status(404).json({msg:"Lo sentimos, el usuario no se encuentra registrado"})
@@ -117,6 +122,8 @@ const nuevoPassword= async(req,res)=>{
         if(usuarioBD?.token !== req.params.token) return res.status(404).json({msg:"Lo sentimos, no se puede validar la cuenta por el token"})
         const verificarPassword = await usuarioBD.matchPasswords(password)
         if(verificarPassword) return res.status(400).json({msg:"Lo sentimos, el password no puede ser igual al anterior"})
+        const validacionPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){10,}$/;
+        if(!validacionPassword.test(password)) return res.status(400).json({msg:"Lo sentimos, el password debe tener mínimo 10 caracteres, una mayúscula, una minúscula, un número y un caracter especial"})
         // Fin de validaciones
         usuarioBD.token = null
         usuarioBD.contrasenia = await usuarioBD.encryptPassword(password)
