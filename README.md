@@ -110,3 +110,52 @@ Para poner en funcionamiento el servidor y la API.
 
 #### **Postman**
 Para su interactuar con cada uno de los endpoints correspondientes utilizar la herramienta Postman mediante el siguiente enlace.
+https://documenter.getpostman.com/view/30178148/2s9YymFQ2E
+
+En caso de realizar pruebas locales no ligadas con la API en produccion se debera insertar en la base de datos en la coleccion usuarios el tipo de cuenta administrador, como la siguiente plantilla.
+```
+{
+  "_id": {
+    "$oid": "656bb693651dc0de2f61e19f"
+  },
+  "nombre": "Admin",
+  "apellido": "admin",
+  "correo": "correo@correo.com",
+  "contrasenia": "$2a$10$lgIPV5YRuueHoKfJWDVER.hCTwwadokb2eXMfe9fqlROdJEDAsste",
+  "token": null,
+  "confirmEmail": true,
+  "estado": true,
+  "tipo_cuenta": "Admin",
+  "createdAt": {
+    "$date": "2023-12-02T22:29:49.254Z"
+  },
+  "updatedAt": {
+    "$date": "2023-12-19T16:16:30.672Z"
+  },
+  "__v": 0
+}
+```
+Tambien se debera insertar la informacion semejante al registro en la coleccion clientes para obtener el acceso al perfil.
+```
+{
+  "_id": { "$oid": "65ada7538e995ef882e4ceae" },
+  "nombre": "Super",
+  "apellido": "Admin",
+  "direccion": "Nowhere",
+  "correo": "correo@correo.com",
+  "telefono": { "$numberInt": "9999998" },
+  "usuario": {
+    "$oid": "Igual al id del usuario admin"
+  },
+  "createdAt": {
+    "$date": { "$numberLong": "1702855394274" }
+  },
+  "updatedAt": {
+    "$date": { "$numberLong": "1704056134499" }
+  },
+  "__v": { "$numberInt": "0" }
+}
+```
+La contrasenia debera ser cambiada mediante el endpoint de recuperar contrasenia. Debido a las diferencias en la secret Key al crear el algoritmo del JWT.
+
+
