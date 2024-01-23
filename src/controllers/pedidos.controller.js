@@ -67,7 +67,7 @@ const visulizarPedido = async (req, res) => {
             select: "nombre total imagen"
         }).select('-__v  -updatedAt -createdAt');
         if (!pedidoBDD) return res.status(400).json({ mensaje: 'No existe el pedido' });
-        if (pedidoBDD.cliente.toString() !== usuarioBD._id.toString()) return res.status(400).json({ mensaje: 'El pedido no pertenece al usuario' });
+        if (pedidoBDD.cliente.toString() !== usuarioBD._id.toString() && req.usuarioBD.tipo_cuenta !== 'Admin') return res.status(400).json({ mensaje: 'El pedido no pertenece al usuario' });
         // Fin de validaciones
         res.status(200).json({ mensaje: `Pedido ${pedidoBDD.estado}`, pedido: pedidoBDD });
     } catch (error) {
