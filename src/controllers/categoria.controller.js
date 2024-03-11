@@ -64,8 +64,8 @@ const actualizarCategoria = async (req, res) => {
             return res
                 .status(400)
                 .json({ msg: "Lo sentimos, la categoria no se encuentra registrada" });
-        const nombreTrim = nombre.trim();
-        const descripcionTrim = descripcion.trim();
+        const nombreTrim = verificarCategoria.nombre.trim();
+        const descripcionTrim = verificarCategoria.descripcion.trim();
         if(nombreTrim === "" || descripcionTrim === "")
             return res
                 .status(400)
