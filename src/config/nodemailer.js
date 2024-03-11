@@ -64,7 +64,7 @@ const sendMailNotifyOrder = async(userMail, Pedido)=>{
         </p>
         <p>
             Revise sus pedidos de compra en el siguiente enlace <br>
-            <a href="https://mbytesoluciones.com/nuevo/cliente/compras.php">PEDIDOS 🛒</a>
+            <a href="https://mbytesoluciones.com/login.php">PEDIDOS 🛒</a>
         </p>
         <p>
             <b>Nota: </b> No responder a este correo
