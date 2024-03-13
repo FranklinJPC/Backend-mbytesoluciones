@@ -35,6 +35,7 @@ const registro = async (req,res)=>{
         const verificarEmailBDD = await Usuarios.findOne({correo})
         if(verificarEmailBDD) return res.status(400).json({msg:"Lo sentimos, el email ya se encuentra registrado"})
         if(nombre.length > 20) return res.status(400).json({msg:"Lo sentimos, el nombre no puede tener más de 20 caracteres"})
+        if(nombre.length < 3) return res.status(400).json({msg: "El nombre debera tener un minimo de 3 caracteres"}) 
         if(apellido.length > 50) return res.status(400).json({msg:"Lo sentimos, el apellido no puede tener más de 50 caracteres"})
         if(telefono.length > 10) return res.status(400).json({msg:"Lo sentimos, el telefono no puede tener más de 10 caracteres"})
         if(direccion.length > 100) return res.status(400).json({msg:"Lo sentimos, la direccion no puede tener más de 100 caracteres"})
